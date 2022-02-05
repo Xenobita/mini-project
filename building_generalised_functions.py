@@ -100,46 +100,14 @@ def delete_item(file_name):
 ###########################################################################################
 # Week 3 stuff 
 
-# def select_courier(file_name):
-#     file_contents_list = []
-#     with open(file_name, 'r') as file_contents:
-#         for item in file_contents:
-#             file_contents_list.append(item)
-#         print_as_indexed_list(file_contents_list)
-#         courier_index = int(input('Enter the index number of the courier assigned to this order: ')),
-#         courier_chosen = str(file_contents_list[int(courier_index)]).strip('\n')
-#         print(f'You have assigned {courier_chosen} to this order.')
-
-def select_courier(file_name):
+def select_courier(self):
     file_contents_list = []
-    with open(file_name, 'r') as file_contents:
+    with open('couriers.txt', 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
     print_as_indexed_list(file_contents_list)
     courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
     courier_choice = str(file_contents_list[int(courier_index)]).strip('\n')
-    print(f'You have selected {courier_choice} for this order.')
-
-class Orders(object):
-    def __init__(self, customer_name, customer_address, customer_phone_number, courier, status='pending'):
-        self.customer_name = customer_name
-        self.customer_address = customer_address
-        self.customer_phone_number = customer_phone_number
-        self.courier = courier
-        # self.status = status
-
-    @classmethod
-    def from_input(cls):
-        return Orders(
-            input('Enter customer name: '),
-            input('Enter the customer\'s full address: '),
-            input('Enter the customer\'s phone number: '),
-            input(select_courier('couriers.txt')),
-            print('Order is currently pending')
-        )
+    return f'You have selected {courier_choice} for this order.'
 
 
-customer = Orders.from_input()
-# print(customer())
-
-# print(select_courier('couriers.txt'))
