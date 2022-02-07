@@ -27,20 +27,20 @@ def couriers_menu():
     [3] STRETCH Update a courier
     [4] STRETCH Delete a courier''')
 
-def delete_courier(courier_list):
-    for idx, val in enumerate(courier_list):
-        print(idx, val)
-    menu_selection = int(input('\nPlease enter the number of the )courier you would like to delete: '))
-    del courier_list[int(menu_selection)]
-    print('Your new courier list looks like this: ')
-    for idx, val in enumerate(courier_list):
-        print(idx, val)
+def orders_menu():
+    print(''' You are now in the ORDERS menu. What would you like to do?
+    [0] Return to main menu
+    [1] View all orders
+    [2] Create new order
+    [3] Update order status
+    [4] Update order details
+    [5] Delete order''')
 
 def invalid_choice():
     print('''You have made an invalid selection.
     Returning to previous menu...\n''')
 
-## Generalised functions below (see about removing specific ones)
+## Generalised functions
 def read_file_sorted(file_name):
     file_contents_list = []
     with open(file_name, 'r') as file_contents:
