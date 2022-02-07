@@ -97,17 +97,61 @@ def delete_item(file_name):
 
 # ['Zagreus', 'Hades', 'Charon', 'Chaos', 'Megaera', 'Alecto', 'Tisiphone', 'Thanatos', 'Hypnos']
 
+# customer_name, customer_address, customer_phone_number, courier, order_statusXen,Hua,545454,4,PENDING
+
 ###########################################################################################
 # Week 3 stuff 
 
-def select_courier(self):
+# Courier selection
+def display_couriers_with_index():
     file_contents_list = []
     with open('couriers.txt', 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
     print_as_indexed_list(file_contents_list)
-    courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+        
+
+def courier_choice(courier_index):
+    file_contents_list = []
+    with open('couriers.txt', 'r') as file_contents:
+        for item in file_contents:
+            file_contents_list.append(item)
     courier_choice = str(file_contents_list[int(courier_index)]).strip('\n')
-    return f'You have selected {courier_choice} for this order.'
+    print(f'You have selected {courier_choice} for this order.')
 
+# display_couriers_with_index()
+# courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+# courier_choice('couriers.txt', courier_index)
 
+########################################################
+
+import csv
+from pprint import pp
+
+def view_orders():
+    with open('orders.csv', 'r') as orders_file_contents:
+        reader = csv.DictReader(orders_file_contents)
+        for row in reader:
+            pp(row)
+
+def add_order():
+    with open('orders.csv', 'a', newline="") as orders_file_contents:
+        writer = csv.writer(orders_file_contents)
+        user_input = []
+        customer_name = input('Enter customer name: ')
+        user_input.append(customer_name)
+        customer_address = input('Enter customer\'s address: ')
+        user_input.append(customer_address)
+        customer_phone_number = input('Enter customer\'s phone number: ')
+        user_input.append(customer_phone_number)
+        display_couriers_with_index()
+        courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+        courier_choice(courier_index)
+        user_input.append(courier_index)
+        order_status = "PENDING"
+        user_input.append(order_status)
+        pp(user_input)
+        writer.writerow(user_input)
+
+view_orders()
+# add_order()
