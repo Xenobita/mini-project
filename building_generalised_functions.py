@@ -97,31 +97,35 @@ def delete_item(file_name):
 
 # ['Zagreus', 'Hades', 'Charon', 'Chaos', 'Megaera', 'Alecto', 'Tisiphone', 'Thanatos', 'Hypnos']
 
-# customer_name, customer_address, customer_phone_number, courier, order_statusXen,Hua,545454,4,PENDING
+# Name,Address,Phone Number,Courier,Order Status
+# Xan,"43 Pride Apartments, Hubbu Lane, BF9 4SL",039459292405,3,PENDING
+# Asia,"72 Brummie Lane, Birmingham, BR9 3DS",07922503449,4,PENDING
+# Sam,"53 Havistock Close, Leicestershire, LE2 4FF",02339601332,3,PENDING
+
 
 ###########################################################################################
 # Week 3 stuff 
 
 # Courier selection
-def display_couriers_with_index():
+def display_with_index(filename):
     file_contents_list = []
-    with open('couriers.txt', 'r') as file_contents:
+    with open(filename, 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
     print_as_indexed_list(file_contents_list)
         
 
-def courier_choice(courier_index):
+def display_selection(filename, courier_index):
     file_contents_list = []
-    with open('couriers.txt', 'r') as file_contents:
+    with open(filename, 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
-    courier_choice = str(file_contents_list[int(courier_index)]).strip('\n')
-    print(f'You have selected {courier_choice} for this order.')
+    display_selection = str(file_contents_list[int(courier_index)]).strip('\n')
+    print(f'You have selected {display_selection} for this order.')
 
-# display_couriers_with_index()
+# display_with_index()
 # courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
-# courier_choice('couriers.txt', courier_index)
+# display_selection('couriers.txt', courier_index)
 
 ########################################################
 
@@ -144,14 +148,27 @@ def add_order():
         user_input.append(customer_address)
         customer_phone_number = input('Enter customer\'s phone number: ')
         user_input.append(customer_phone_number)
-        display_couriers_with_index()
+        display_with_index('couriers.txt')
         courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
-        courier_choice(courier_index)
+        display_selection('couriers.txt', courier_index)
         user_input.append(courier_index)
         order_status = "PENDING"
         user_input.append(order_status)
-        pp(user_input)
+        print('Order is currently PENDING')
         writer.writerow(user_input)
 
-view_orders()
-# add_order()
+def update_status():
+    with open('orders.csv', 'r+', newline="") as orders_file_contents:
+        file_contents_list = []
+        reader = csv.DictReader(orders_file_contents)
+        for row in reader:
+            customer_name = row.get('Name')
+            order_status = row.get('Order Status')
+            name_and_status = [customer_name, order_status]
+            file_contents_list.append(name_and_status)
+        print_as_indexed_list(file_contents_list)
+
+
+# view_orders()
+add_order()
+# update_status()
