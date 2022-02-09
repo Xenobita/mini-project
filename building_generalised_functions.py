@@ -106,8 +106,8 @@ def delete_item(file_name):
 ###########################################################################################
 # Week 3 stuff 
 
-# Courier selection
-def display_with_index(filename):
+# Selecting from files
+def read_file_with_idx(filename):
     file_contents_list = []
     with open(filename, 'r') as file_contents:
         for item in file_contents:
@@ -115,32 +115,46 @@ def display_with_index(filename):
     print_as_indexed_list(file_contents_list)
         
 
-def display_selection(filename, courier_index):
+def courier_selection(filename, item_index):
     file_contents_list = []
     with open(filename, 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
-    display_selection = str(file_contents_list[int(courier_index)]).strip('\n')
-    print(f'You have selected {display_selection} for this order.')
+    selection_from_txt = str(file_contents_list[int(item_index)]).strip('\n')
+    print(f'You have selected {selection_from_txt} for this order.')
 
-# display_with_index()
-# courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
-# display_selection('couriers.txt', courier_index)
+def display_selection_from_csv(filename, item_index):
+    file_contents_list = []
+    with open(filename, 'r') as file_contents:
+        reader = csv.DictReader(file_contents)
+        for row in reader:
+            customer_name = row.get('Name')
+            order_status = row.get('Order Status')
+            name_and_status = [customer_name, order_status]
+            file_contents_list.append(name_and_status)
+            # file_contents_list.append(row)
+    order_name = str(file_contents_list[int(item_index)][0]).strip('\n').strip("['").strip("']")
+    order_status = str(file_contents_list[int(item_index)][1]).strip('\n').strip("['").strip("']")
+    print(f'{order_name}\'s order is currently {order_status}.')
+
+# read_file_with_idx()
+# item_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+# courier_selection('couriers.txt', item_index)
 
 ########################################################
 
 import csv
 from pprint import pp
 
-def view_orders():
-    with open('orders.csv', 'r') as orders_file_contents:
-        reader = csv.DictReader(orders_file_contents)
+def view_csv(filename):
+    with open(filename, 'r') as file_contents:
+        reader = csv.DictReader(file_contents)
         for row in reader:
             pp(row)
 
 def add_order():
-    with open('orders.csv', 'a', newline="") as orders_file_contents:
-        writer = csv.writer(orders_file_contents)
+    with open('orders.csv', 'a', newline="") as file_contents:
+        writer = csv.writer(file_contents)
         user_input = []
         customer_name = input('Enter customer name: ')
         user_input.append(customer_name)
@@ -148,27 +162,35 @@ def add_order():
         user_input.append(customer_address)
         customer_phone_number = input('Enter customer\'s phone number: ')
         user_input.append(customer_phone_number)
-        display_with_index('couriers.txt')
-        courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
-        display_selection('couriers.txt', courier_index)
-        user_input.append(courier_index)
+        read_file_with_idx('couriers.txt')
+        item_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+        courier_selection('couriers.txt', item_index)
+        user_input.append(item_index)
         order_status = "PENDING"
         user_input.append(order_status)
         print('Order is currently PENDING')
         writer.writerow(user_input)
 
 def update_status():
-    with open('orders.csv', 'r+', newline="") as orders_file_contents:
+    with open('orders.csv', 'r+', newline="") as file_contents:
         file_contents_list = []
-        reader = csv.DictReader(orders_file_contents)
+        reader = csv.DictReader(file_contents)
         for row in reader:
-            customer_name = row.get('Name')
-            order_status = row.get('Order Status')
-            name_and_status = [customer_name, order_status]
-            file_contents_list.append(name_and_status)
+            # customer_name = row.get('Name')
+            # order_status = row.get('Order Status')
+            # name_and_status = [customer_name, order_status]
+            # file_contents_list.append(name_and_status)
+            file_contents_list.append(row)
         print_as_indexed_list(file_contents_list)
+        update_order_selection = input('\nPlease enter the number of the order you would like to update: ')
+        display_selection_from_csv('orders.csv', update_order_selection)
+        read_file_with_idx('status.txt')
+        updated_status_index = (input('\nPlease enter the number for the updated status: '))
 
 
-# view_orders()
-add_order()
-# update_status()
+# view_csv('orders.csv')
+# add_order()
+update_status()
+
+# read_file_with_idx('status.txt')
+# display_selection_from_csv('orders.csv', 3)
