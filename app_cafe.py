@@ -3,74 +3,81 @@ import os
 import time
 
 while True:
-    main_menu()
+    print(main_menu())
 
     menu_selection = input('\nPlease enter number of your choice here: ')
 
     if menu_selection == '0':
-        exit_app()
+        print(exit_app())
         break
 
     elif menu_selection == '1':
         while True:
-            products_menu()
+            print(products_menu())
             menu_selection = input('\nPlease enter the number of your choice here: ')
             if menu_selection == '0':
-                return_main()
-                break # This gets the app to return to the start
+                print(return_main())
+                break
             elif menu_selection == '1':
-                read_file_sorted('products.txt')
+                read_csv('products.csv')
             elif menu_selection == '2':
-                add_item('products.txt')
-                read_file('products.txt')
+                print(add_new_product(set_currency))
             elif menu_selection == '3':
-                update_item('products.txt')
+                print(update_function('products.csv', 'product', update_product_prompts, product_fieldnames))
             elif menu_selection == '4':
-                delete_item('products.txt')
+                delete_function('products.csv', 'product', product_fieldnames)
             else:
                 invalid_choice()
                 continue
 
-            do_more = input('Would you like to return to the PRODUCTS menu? (y/n): ')
-            if do_more == 'y':
-                print('Returning to PRODUCTS menu...\n')
-                continue
-            elif do_more == 'n':
-                print('Returning to MAIN menu...\n')
+            if do_more_in_current_menu('PRODUCTS', "MAIN") == False:
                 break
-            else:
-                invalid_choice()
-                continue
 
     elif menu_selection == '2':
         while True:
             couriers_menu()
             menu_selection = input('\nPlease enter the number of your choice here: ')
             if menu_selection == '0':
-                return_main()
+                print(return_main())
                 break
             elif menu_selection == '1':
-                read_file_sorted('couriers.txt')
+                read_csv('couriers.csv')
             elif menu_selection == '2':
-                add_item('couriers.txt')
-                read_file('couriers.txt')
+                print(add_new_courier())
             elif menu_selection == '3':
-                update_item('couriers.txt')
+                print(update_function('couriers.csv', 'courier', update_courier_prompts, courier_fieldnames))
             elif menu_selection == '4':
-                delete_item('couriers.txt')
+                delete_function('couriers.csv', 'courier', courier_fieldnames)
             else:
                 invalid_choice()
                 continue
 
-            do_more = input('Would you like to return to the COURIERS menu? (y/n): ')
-            if do_more == 'y':
-                print('Returning to COURIERS menu...\n')
-                continue
-            elif do_more == 'n':
-                print('Returning to MAIN menu...\n')
+            if do_more_in_current_menu('COURIERS', "MAIN") == False:
                 break
+
+    elif menu_selection == '3':
+        while True:
+            orders_menu()
+            menu_selection = input('\nPlease enter the number of your choice here: ')
+            if menu_selection == '0':
+                print(return_main())
+                break
+            elif menu_selection == '1':
+                read_csv('orders.csv')
+            elif menu_selection == '2':
+                print(add_new_order())
+            # elif menu_selection == '3':
+            #     ## TODO UPDATE ORDER STATUS
+            elif menu_selection == '4':
+                print(update_function('orders.csv', 'order', update_order_prompts, order_fieldnames))
+            elif menu_selection == '5':
+                delete_function('orders.csv', 'order', order_fieldnames)
             else:
                 invalid_choice()
-                continue  
+                continue
+
+            if do_more_in_current_menu('ORDERS', "MAIN") == False:
+                break
+
     else:
         invalid_choice()

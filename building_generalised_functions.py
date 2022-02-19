@@ -1,7 +1,28 @@
-# Old lists below in case the worst happens
-# ['green tea', 'lemon tea', 'redbush tea', 'breakfast tea', 'strawberry leaf tea', 'raspberry leaf tea', 'peppermint tea', 'flat white', 'americano (hot)', 'americano (cold)']
+# csv below in case the worst happens
+# Name,Price
+# Green Tea,2.49
+# Lemon Tea,1.79
+# Redbush Tea,1.79
+# Breakfast Tea,0.99
+# Strawberry Leaf Tea,2.89
+# Raspberry Leaf Tea,2.89
+# Peppermint Tea,1,79
+# Flat White,1.99
+# Americano (Hot),3.79
+# Americano (Cold),3.79
+# 
 
-# ['Zagreus', 'Hades', 'Charon', 'Chaos', 'Megaera', 'Alecto', 'Tisiphone', 'Thanatos', 'Hypnos']
+# Name,Phone Number
+# Zagreus,07945223663
+# Hades,07945223664
+# Charon,07945223665
+# Chaos,07945223667
+# Megaera,07945223668
+# Alecto,07945223669
+# Tisiphone,07945223670
+# Thanatos,07945223671
+# Hypnos,07945223672
+# saira,07938572859
 
 # Name,Address,Phone Number,Courier,Order Status
 # Xan,"43 Pride Apartments, Hubbu Lane, BF9 4SL",039459292405,3,PENDING
@@ -140,48 +161,29 @@ def display_selection_from_csv(filename, item_index):
 
 ########################################################
 
-import csv
-from pprint import pp
+# import csv
+# from entry_prompts import *
 
-def add_order():
-    with open('orders.csv', 'a', newline="") as file_contents:
-        writer = csv.writer(file_contents)
-        user_input = []
-        customer_name = input('Enter customer name: ')
-        user_input.append(customer_name)
-        customer_address = input('Enter customer\'s address: ')
-        user_input.append(customer_address)
-        customer_phone_number = input('Enter customer\'s phone number: ')
-        user_input.append(customer_phone_number)
-        read_file_with_idx('couriers.txt')
-        item_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
-        courier_selection('couriers.txt', item_index)
-        user_input.append(item_index)
-        order_status = "PENDING"
-        user_input.append(order_status)
-        print('Order is currently PENDING')
-        writer.writerow(user_input)
-
-# TODO Complete update status function; find a way to pop particular entry out of a dictionary, change a value in it, then put the entry back into a dictionary
-def update_status():
-    with open('orders.csv', 'r+', newline="") as file_contents:
-        file_contents_list = []
-        reader = csv.DictReader(file_contents)
-        for row in reader:
-            customer_name = row.get('Name')
-            customer_address = row.get('Address')
-            customer_phone_number = row.get('Phone Number')
-            courier = row.get('Courier')
-            order_status = row.get('Order Status')
-            ordered_products = row.get('Products')
-            order_details = [customer_name, customer_address, customer_phone_number, courier, order_status]
-            file_contents_list.append(order_details)
-            # file_contents_list.append(row)
-        print_as_indexed_list(file_contents_list)
-        update_order_selection = input('\nPlease enter the number of the order you would like to update: ')
-        display_selection_from_csv('orders.csv', update_order_selection)
-        read_file_with_idx('status.txt')
-        updated_status_index = (input('\nPlease enter the number for the updated status: '))
+# # TODO Complete update status function; find a way to pop particular entry out of a dictionary, change a value in it, then put the entry back into a dictionary
+# def update_status():
+#     with open('orders.csv', 'r+', newline="") as file_contents:
+#         file_contents_list = []
+#         reader = csv.DictReader(file_contents)
+#         for row in reader:
+#             customer_name = row.get('Name')
+#             customer_address = row.get('Address')
+#             customer_phone_number = row.get('Phone Number')
+#             courier = row.get('Courier')
+#             order_status = row.get('Order Status')
+#             ordered_products = row.get('Products')
+#             order_details = [customer_name, customer_address, customer_phone_number, courier, order_status]
+#             file_contents_list.append(order_details)
+#             # file_contents_list.append(row)
+#         print_as_indexed_list(file_contents_list)
+#         update_order_selection = input('\nPlease enter the number of the order you would like to update: ')
+#         display_selection_from_csv('orders.csv', update_order_selection)
+#         read_file_with_idx('status.txt')
+#         updated_status_index = (input('\nPlease enter the number for the updated status: '))
         
 # view_csv('orders.csv')
 # add_order()
@@ -191,39 +193,39 @@ def update_status():
 # display_selection_from_csv('orders.csv', 3)
 
 #######################################################
-# Reading from csv
+# Reading from csv 
 
-def read_csv(filename):
-    with open(filename, 'r') as file:
-        file_contents = csv.DictReader(file)
-        for row in file_contents:
-            # print(row)
-            print(file_contents)
-        # return file_contents
-
-def read_csv_with_idx(filename):
-    file_contents_list = []
-    with open(filename, 'r', newline="") as file:
-        file_contents = csv.DictReader(file)
-        for row in file_contents:
-            file_contents_list.append(row)
-        print_as_indexed_list(file_contents_list)
+# def read_full_csv_with_idx(filename):
+#     file_contents_list = []
+#     with open(filename, 'r', newline="") as file:
+#         file_contents = csv.DictReader(file)
+#         for row in file_contents:
+#             file_contents_list.append(row)
+#         print_as_indexed_list(file_contents_list)
+#     return file_contents_list
 
 # read_csv('couriers.csv')
-# read_csv_with_idx('couriers.csv')
+# read_full_csv_with_idx('couriers.csv')
 
 ########################################################
 # WEEK FOUR DO-OVER
-from fieldnames import *
+# from fieldnames import *
+# from cafe_menus import set_currency
 
-def add_to_CSV(filename, fieldnames_from_csv, item_to_add, category_name):
-    with open(filename, 'a', newline="") as file_contents:
-        writer = csv.DictWriter(file_contents, fieldnames = fieldnames_from_csv)
-        writer.writerow(item_to_add)
-    return f'Your {category_name} has been added'
+# def add_to_csv(filename, fieldnames_from_csv, item_to_add, category_name):
+#     with open(filename, 'a', newline="") as file_contents:
+#         writer = csv.DictWriter(file_contents, fieldnames = fieldnames_from_csv)
+#         writer.writerow(item_to_add)
+#     return f'Your {category_name} has been added'
+
+def write_to_csv (filename, field_names, updated_list):
+    with open (filename, 'w', newline='') as file:
+        product_writer = csv.DictWriter(file, fieldnames = field_names)
+        product_writer.writeheader()
+        product_writer.writerows(updated_list)
 
 # Function that will be good to use for selecting within other functions
-def read_csv_with_idx_for_selection(filename, key):
+def read_abridged_csv_with_idx_for_selection(filename, key):
     file_contents_list = []
     with open(filename, 'r', newline="") as file:
         file_contents = csv.DictReader(file)
@@ -239,15 +241,14 @@ def selection_from_idx(filename, item_index, key_from_csv):
         reader = csv.DictReader(file_contents)
         for row in reader:
             file_contents_list.append(row.get(key_from_csv))
-    selection_from_txt = str(file_contents_list[int(item_index)]).strip('\n')
-    return f'You have added {selection_from_txt} to this order.'
-
+    selection_from_csv = str(file_contents_list[int(item_index)]).strip('\n')
+    return f'You have added {selection_from_csv} to this order.'
 
 ## ORDER FUNCTIONS
 def create_product_list_for_order():
     products_in_order = []
     while True:
-        read_csv_with_idx_for_selection('products.csv', "Name")
+        read_abridged_csv_with_idx_for_selection('products.csv', "Name")
         add_product_to_order = int(input('Please enter the number of a product in the order: '))
         products_in_order.append(add_product_to_order)
         selection_from_idx('products.csv', add_product_to_order, 'Name')
@@ -262,66 +263,116 @@ def create_product_list_for_order():
     return products_in_order
 
 def select_courier_for_order():
-    read_csv_with_idx_for_selection('couriers.csv', "Name")
+    read_abridged_csv_with_idx_for_selection('couriers.csv', "Name")
     courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
     print(selection_from_idx('couriers.csv', courier_index, 'Name'))
     return courier_index
 
 
-
 # ADDING FUNCTIONS
-def add_new_product(currency_symbol):
-    input_keys_and_prompts = {
-        'Name': 'Enter product name: ',
-        'Price': f'Enter the price of the product: {currency_symbol}'
-    }
+def add_new_product(set_currency):
+    add_product_prompts
 
     new_product = {}
 
-    for input_key in input_keys_and_prompts:
-        new_input = input(input_keys_and_prompts.get(input_key))
-        new_product[input_key] = new_input
+    for csv_key in add_product_prompts:
+        user_input_value = input(add_product_prompts.get(csv_key))
+        if csv_key == "Price":
+            new_product[csv_key] = float(user_input_value)
+        else:
+            new_product[csv_key] = user_input_value
         
-    print(add_to_CSV('products.csv', product_fieldnames, new_product, 'product'))
+    print(add_to_csv('products.csv', product_fieldnames, new_product, 'product'))
     
+add_new_product(set_currency)
 
 def add_new_courier():
-    input_keys_and_prompts = {
-        'Name': 'Enter courier name: ',
-        'Phone Number': 'Enter the courier\'s phone number:'
-    }
+    add_courier_prompts
 
     new_courier = {}
 
-    for input_key in input_keys_and_prompts:
-        new_input = input(input_keys_and_prompts.get(input_key))
-        new_courier[input_key] = new_input
+    for csv_key in add_courier_prompts:
+        user_input_value = input(add_courier_prompts.get(csv_key))
+        new_courier[csv_key] = user_input_value
         
-    print(add_to_CSV('couriers.csv', courier_fieldnames, new_courier, 'courier'))
+    print(add_to_csv('couriers.csv', courier_fieldnames, new_courier, 'courier'))
 
 def add_new_order():
-    input_keys_and_prompts = {
-        'Customer Name' : 'Enter customer name: ',
-        'Address': 'Enter the customer\'s full address: ',
-        'Phone Number' : 'Enter the customer\'s phone number: ',
-        'Products' : 'Press return key to select products for this order.\n',
-        'Courier' : '''Products added to order.
-Press return key to select a courier for this order\n''',
-        'Order Status' : "Your order is currently PENDING"
-    }
+    add_order_prompts
 
     new_order = {}
 
-    for input_key in input_keys_and_prompts:
-        new_input = input(input_keys_and_prompts.get(input_key))
-        if input_key == 'Products':
-            new_order[input_key] = create_product_list_for_order()
-        elif input_key == "Courier":
-            new_order[input_key] = select_courier_for_order()
-        elif input_key == "Order Status":
-            new_order[input_key] = "PENDING"
+    for csv_key in add_order_prompts:
+        user_input_value = input(add_order_prompts.get(csv_key))
+        if csv_key == 'Products':
+            new_order[csv_key] = create_product_list_for_order()
+        elif csv_key == "Courier":
+            new_order[csv_key] = select_courier_for_order()
+        elif csv_key == "Order Status":
+            new_order[csv_key] = "PENDING"
         else:
-            new_order[input_key] = new_input
+            new_order[csv_key] = user_input_value
         
-    print(add_to_CSV('orders.csv', order_fieldnames, new_order, 'order'))
+    print(add_to_csv('orders.csv', order_fieldnames, new_order, 'order'))
 
+## Update functions
+def show_selection_for_action(item_index, file_contents_list, category_name, action):
+    entry_for_update = file_contents_list[int(item_index)]
+    return f'''This is the {category_name} you will be {action}. 
+    {entry_for_update}'''
+
+def update_function_template(filename, category_name, category_prompts, fieldnames):
+    while True:
+        file_contents_list = read_full_csv_with_idx(filename)
+        update_index = int(input(f'\nPlease enter the number of the {category_name} you would like to update: '))
+        if update_index >= len(file_contents_list):
+            print('You have entered an invalid number. Please try again')
+            continue
+        print(show_selection_for_action(update_index, file_contents_list, category_name, 'updating'))
+        
+        category_prompts
+
+        for csv_key in category_prompts:
+            user_input_value = input(category_prompts.get(csv_key))
+            if user_input_value == "":
+                pass
+            else:
+                file_contents_list[update_index][csv_key] = user_input_value
+        
+        write_to_csv(filename, fieldnames, file_contents_list)
+        break
+    return f'Your {category_name} has been updated'
+
+### Testing update function
+# print(update_function_template('products.csv', 'product', product_prompts, product_fieldnames))
+
+### Delete function
+def delete_function_template(filename, category_name, fieldnames):
+    while True:
+        file_contents_list = read_full_csv_with_idx(filename)
+        delete_index = int(input(f'\nPlease enter the number of the {category_name} you would like to delete: '))
+        if delete_index >= len(file_contents_list):
+            print('You have entered an invalid number. Please try again')
+            continue
+        print(show_selection_for_action(delete_index, file_contents_list, category_name, 'deleting'))
+        if confirmation('delete') == False:
+            continue
+        else:
+            del file_contents_list[delete_index]
+            
+            write_to_csv(filename, fieldnames, file_contents_list)
+            return f'Your {category_name} has been deleted'
+
+def confirmation(action):
+    confirm_action = input(f'Are you sure you want to {action} this item? (y/n): ')
+    if confirm_action == 'y':
+        return True
+    elif confirm_action == 'n':
+        return False
+    else:
+        invalid_choice()
+        return True
+
+print(delete_function_template('products.csv', 'products', product_fieldnames))
+# read_csv('couriers.csv')
+# read_full_csv_with_idx('couriers.csv')

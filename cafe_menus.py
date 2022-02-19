@@ -1,17 +1,20 @@
 import csv
+from fieldnames import *
+from entry_prompts import *
+## To set currency, see entry_prompts.py
 
 def main_menu():
-    print('''Hello, welcome to the Xen\'s Music and Coffee app.
+    return('''Hello, welcome to the Xen\'s Music and Coffee app.
     [0] Exit app
     [1] Products Menu
     [2] Couriers Menu
     [3] Orders Menu''')
 
 def exit_app(): # Stops the app altogether
-    print('The app will now close') 
+    return('The app will now close') 
 
 def products_menu():
-    print('''You are now in the PRODUCTS menu. What would you like to do?
+    return('''You are now in the PRODUCTS menu. What would you like to do?
     [0] Return to main menu
     [1] View all products (in alphabetical order)
     [2] Add a new product
@@ -19,7 +22,7 @@ def products_menu():
     [4] STRETCH Delete a product''')
 
 def return_main():
-        print('Returning to main menu\n')
+        return ('Returning to MAIN menu\n')
 
 def couriers_menu():
     print('''You are now in the COURIERS menu. What would you like to do?
@@ -42,86 +45,45 @@ def invalid_choice():
     print('''You have made an invalid selection.
     Returning to previous menu...\n''')
 
-## Generalised functions
-# TXT files
-def read_file_sorted(file_name):
+########################
+# Reading Functions
+# TXT functions
+def read_txt_file_with_index(file_name):
     file_contents_list = []
     with open(file_name, 'r') as file_contents:
         for item in file_contents:
             file_contents_list.append(item)
-    print(''.join(sorted(file_contents_list)))
+    return file_contents_list
 
-def read_file(file_name):
-    file_contents_list = []
-    with open(file_name, 'r') as file_contents:
-        for item in file_contents:
-            file_contents_list.append(item)
-    print(''.join(file_contents_list))
-
+# Indexing function
 def print_as_indexed_list(file_contents_list):
     for idx, val in enumerate(file_contents_list):
         print(idx, str(val).strip('\n'))
 
-def update_item(file_name):
-    file_contents_list = []
-    with open(file_name, 'r') as file_contents:
-        for item in file_contents:
-            file_contents_list.append(item)
-        while True:
-            print_as_indexed_list(file_contents_list)
-            update_index = int(input('\nPlease enter the number of the item you would like to update: '))
-            if update_index >= len(file_contents_list):
-                print('You have entered an invalid number. Please try again')
-                continue
-            item_to_update = str(file_contents_list[int(update_index)]).strip('\n')
-            update_item_with = input(f'You have selected {item_to_update}. Please enter the updated name: ')
-            file_contents_list[int(update_index)] = update_item_with.title() 
-            with open(file_name, 'w') as file_contents:
-                for item in file_contents_list:
-                    item = item.rstrip()
-                    file_contents.write(item + '\n')
-            print(f'{item_to_update} successfully updated to {update_item_with.title()}')
-            break
-
-def delete_item(file_name):
-    file_contents_list = []
-    with open(file_name, 'r') as file_contents:
-        for item in file_contents:
-            file_contents_list.append(item)
-        while True:
-            print_as_indexed_list(file_contents_list)
-            delete_index = int(input('\nPlease enter the number of the item you would like to delete: '))
-            if delete_index >= len(file_contents_list):
-                print('You have entered an invalid number. Please try again.')
-                continue
-            item_to_delete = str(file_contents_list[int(delete_index)]).strip('\n')
-            delete_item_confirmation = input(f'Are you sure you want to delete {item_to_delete}? (y/n): ')
-            if delete_item_confirmation == "y":
-                print(f'{item_to_delete} successfully deleted.')
-                del(file_contents_list[int(delete_index)])
-                break
-            elif delete_item_confirmation == "n":
-                print('Returning to list')
-                continue
-            else:
-                invalid_choice()
-                # print('Returning to list') I need to figure out what to write here and create a different invalid choice for indexes?
-                continue
-    with open(file_name, 'w') as file_contents:
-        for item in file_contents_list:
-            item = item.rstrip()
-            file_contents.write(item + '\n')
-
-# Functional functions
-
-# CSV functions (to replace txt ones)
+# csv functions (to replace txt ones)
 def read_csv(filename):
     with open(filename, 'r') as file:
         file_contents = csv.DictReader(file)
         for row in file_contents:
             print(row)
 
-def read_csv_with_idx_for_selection(filename, key):
+def read_full_csv_with_idx(filename):
+    file_contents_list = []
+    with open(filename, 'r', newline="") as file:
+        file_contents = csv.DictReader(file)
+        for row in file_contents:
+            file_contents_list.append(row)
+        print_as_indexed_list(file_contents_list)
+    return file_contents_list
+
+def write_to_csv(filename, field_names, updated_list):
+    with open (filename, 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames = field_names)
+        writer.writeheader()
+        writer.writerows(updated_list)
+
+# Function that returns an specifiec key's value with an index from a csv
+def read_abridged_csv_with_idx_for_selection(filename, key):
     file_contents_list = []
     with open(filename, 'r', newline="") as file:
         file_contents = csv.DictReader(file)
@@ -130,14 +92,12 @@ def read_csv_with_idx_for_selection(filename, key):
         print_as_indexed_list(file_contents_list)
     return file_contents_list
 
-def selection_from_idx(filename, item_index):
-    file_contents_list = []
-    with open(filename, 'r') as file_contents:
-        reader = csv.DictReader(file_contents)
-        for row in reader:
-            file_contents_list.append(row.get("Name"))
-    selection_from_txt = str(file_contents_list[int(item_index)]).strip('\n')
-    print(f'You have added {selection_from_txt} to this order.')
+# Appends entry to end of csv file
+def add_to_csv(filename, fieldnames_from_csv, item_to_add, category_name):
+    with open(filename, 'a', newline="") as file_contents:
+        writer = csv.DictWriter(file_contents, fieldnames = fieldnames_from_csv)
+        writer.writerow(item_to_add)
+    return f'Your {category_name} has been added'
 
 # Only to be used within while True loop to avoid repetition
 def do_more_in_current_menu(current_menu, previous_menu):
@@ -152,11 +112,11 @@ def do_more_in_current_menu(current_menu, previous_menu):
         invalid_choice()
         return True
 
-# Orders functions
+# Order-unique functions
 def create_product_list_for_order():
     products_in_order = []
     while True:
-        read_csv_with_idx_for_selection('products.csv', "Name")
+        read_abridged_csv_with_idx_for_selection('products.csv', "Name")
         add_product_to_order = int(input('Please enter the number of a product in the order: '))
         products_in_order.append(add_product_to_order)
         selection_from_idx('products.csv', add_product_to_order)
@@ -170,4 +130,123 @@ def create_product_list_for_order():
             continue
     return products_in_order
 
+def select_courier_for_order():
+    read_abridged_csv_with_idx_for_selection('couriers.csv', "Name")
+    courier_index = int(input('\nPlease enter the number of the courier you would like to assign this order to: '))
+    print(selection_from_idx('couriers.csv', courier_index, 'Name'))
+    return courier_index
 
+def selection_from_idx(filename, item_index, key_from_csv):
+    file_contents_list = []
+    with open(filename, 'r') as file_contents:
+        reader = csv.DictReader(file_contents)
+        for row in reader:
+            file_contents_list.append(row.get(key_from_csv))
+    selection_from_csv = str(file_contents_list[int(item_index)]).strip('\n')
+    return f'You have added {selection_from_csv} to this order.'
+
+# ADDING FUNCTIONS
+def add_new_product(set_currency):
+    add_product_prompts
+
+    new_product = {}
+
+    for csv_key in add_product_prompts:
+        user_input_value = input(add_product_prompts.get(csv_key))
+        if csv_key == "Price":
+            new_product[csv_key] = float(user_input_value)
+        else:
+            new_product[csv_key] = user_input_value
+        
+    return(add_to_csv('products.csv', product_fieldnames, new_product, 'product'))
+
+def add_new_courier():
+    add_courier_prompts
+
+    new_courier = {}
+
+    for csv_key in add_courier_prompts:
+        user_input_value = input(add_courier_prompts.get(csv_key))
+        new_courier[csv_key] = user_input_value
+        
+    return(add_to_csv('couriers.csv', courier_fieldnames, new_courier, 'courier'))
+
+def add_new_order():
+    add_order_prompts
+
+    new_order = {}
+
+    for csv_key in add_order_prompts:
+        user_input_value = input(add_order_prompts.get(csv_key))
+        if csv_key == 'Products':
+            new_order[csv_key] = create_product_list_for_order()
+        elif csv_key == "Courier":
+            new_order[csv_key] = select_courier_for_order()
+        elif csv_key == "Order Status":
+            new_order[csv_key] = "PENDING"
+        else:
+            new_order[csv_key] = user_input_value
+        
+    return(add_to_csv('orders.csv', order_fieldnames, new_order, 'order'))
+
+## Update functions
+def show_selection_for_action(item_index, file_contents_list, category_name, action):
+    entry_for_update = file_contents_list[int(item_index)]
+    return f'''This is the {category_name} you will be {action}. 
+    {entry_for_update}'''
+
+def update_function(filename, category_name, category_prompts, fieldnames):
+    while True:
+        file_contents_list = read_full_csv_with_idx(filename)
+        update_index = int(input(f'\nPlease enter the number of the {category_name} you would like to update: '))
+        if update_index >= len(file_contents_list):
+            print('You have entered an invalid number. Please try again')
+            continue
+        print(show_selection_for_action(update_index, file_contents_list, category_name, 'updating'))
+        
+        category_prompts
+
+        for csv_key in category_prompts:
+            user_input_value = input(category_prompts.get(csv_key))
+            if user_input_value == "":
+                pass
+            elif csv_key == "Products":
+                category_prompts[csv_key] = create_product_list_for_order()
+            elif csv_key == "Courier":
+                category_prompts[csv_key] = select_courier_for_order()
+            else:
+                file_contents_list[update_index][csv_key] = user_input_value
+        
+        write_to_csv(filename, fieldnames, file_contents_list)
+        break
+    return f'Your {category_name} has been updated'
+
+### Testing update function
+# print(update_function_template('products.csv', 'product', product_prompts, product_fieldnames))
+
+### Delete function
+def delete_function(filename, category_name, fieldnames):
+    while True:
+        file_contents_list = read_full_csv_with_idx(filename)
+        delete_index = int(input(f'\nPlease enter the number of the {category_name} you would like to delete: '))
+        if delete_index >= len(file_contents_list):
+            print('You have entered an invalid number. Please try again')
+            continue
+        print(show_selection_for_action(delete_index, file_contents_list, category_name, 'deleting'))
+        if confirmation('delete', category_name) == False:
+            continue
+        else:
+            del file_contents_list[delete_index]
+            
+            write_to_csv(filename, fieldnames, file_contents_list)
+            return f'Your {category_name} has been deleted'
+
+def confirmation(action, category_name):
+    confirm_action = input(f'Are you sure you want to {action} this {category_name}? (y/n): ')
+    if confirm_action == 'y':
+        return True
+    elif confirm_action == 'n':
+        return False
+    else:
+        invalid_choice()
+        return True
